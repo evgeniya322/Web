@@ -25,5 +25,35 @@ namespace WStore.Controllers
             return View(_Employees);
         }
 
+        public IActionResult Details(int? Id)
+        {
+            if (Id is null)
+                return BadRequest();
+
+            var employee = _Employees.FirstOrDefault(e => e.Id == Id);
+            if (employee is null)
+                return NotFound();
+
+            return View(employee);
+        }
+
+        public IActionResult DetailsName(string FirstName, string LastName)
+        {
+            if (FirstName is null && LastName is null)
+                return BadRequest();
+
+            IEnumerable<EmployeeView> employees = _Employees;
+            if (!string.IsNullOrWhiteSpace(FirstName))
+                employees = employees.Where(e => e.FirstName == FirstName);
+            if (!string.IsNullOrWhiteSpace(LastName))
+                employees = employees.Where(e => e.SurName == LastName);
+
+            var employee = employees.FirstOrDefault();
+
+            if (employee is null)
+                return NotFound();
+
+            return View(nameof(Details), employee);
+        }
     }
 }
