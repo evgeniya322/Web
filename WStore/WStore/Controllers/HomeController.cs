@@ -28,9 +28,10 @@ namespace WStore.Controllers
 
         public IActionResult Details(int Id)
         {
-            foreach (var i in _Employees) if (i.Id==Id) return View(i);
-            
-            return View(_Employees[0]);
+            var employee = _Employees.FirstOrDefault(e => e.Id == Id);
+            if (employee is null)
+                return NotFound();
+            return View(employee);
         }
     }
 }
