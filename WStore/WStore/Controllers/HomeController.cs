@@ -9,29 +9,19 @@ namespace WStore.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index()=> View();
 
-        private static readonly List<EmployeeView> _Employees = new List<EmployeeView>
-        {
-            new EmployeeView{Id=1, FirstName="Иван", Patronymic="Иванович",SurName="Иванов", Age=25, City="Томск" },
-            new EmployeeView{Id=2, FirstName="Петр", Patronymic="Петрович",SurName="Петров", Age=45, City="Москва" },
-            new EmployeeView{Id=3, FirstName="Андрей", Patronymic="Андреевич",SurName="Андреев", Age=29, City="Екатеринбург" }
-        };
 
-        public IActionResult GetEmployes()
-        {
-            return View(_Employees);
-        }
+        public IActionResult Blog() => View();
+        public IActionResult BlogSingle() => View();
+        public IActionResult Cart() => View();
+        public IActionResult CheckOut() => View();
+        public IActionResult ContactUs() => View();
+        public IActionResult Login() => View();
+        public IActionResult ProductDetails() => View();
+        public IActionResult Shop() => View();
+        public IActionResult Error404() => View();
 
-        public IActionResult Details(int Id)
-        {
-            var employee = _Employees.FirstOrDefault(e => e.Id == Id);
-            if (employee is null)
-                return NotFound();
-            return View(employee);
-        }
+
     }
 }
