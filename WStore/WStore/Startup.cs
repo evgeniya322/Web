@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WStore.Infrasructure.Implementation;
+using WStore.Infrasructure.Interface;
 
 namespace WStore
 {
@@ -24,6 +26,9 @@ namespace WStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            // Добавляем разрешение зависимости
+            services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +41,7 @@ namespace WStore
 
             app.UseStaticFiles();
 
+            app.UseWelcomePage("/welcome");
             // Производим конфигурацию инфраструктуры MVC
             app.UseMvc(routes =>
             {

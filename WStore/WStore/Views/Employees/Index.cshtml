@@ -1,10 +1,14 @@
 ﻿@model IEnumerable<WStore.Models.EmployeeView>
 
 @{
-    ViewBag.Title="Сотрудники";
+    ViewBag.Title = "Сотрудники";
 }
 
 <h3>@ViewBag.Title</h3>
+
+<hr />
+<a asp-action="Edit" class="btn btn-success">Добавить</a>
+<hr />
 
 <table class="table">
     <thead>
@@ -16,7 +20,7 @@
     </thead>
 
     @foreach (var item in Model)
-        {
+    {
     <tr>
         <td>@item.Id</td>
         <td>
@@ -25,15 +29,21 @@
             </a>
         </td>
         <td>
-            <a asp-action="DetailsName"
+            <a asp-action="Details" asp-route-Id="@item.Id">
+                @item.FirstName
+            </a>
+            @*<a asp-action="DetailsName"
                asp-route-FirstName="@item.FirstName"
                asp-route-LastName="@item.SurName">
                 @item.FirstName
-            </a>
+            </a>*@
         </td>
         <td>@item.Patronymic</td>
         <td>@item.Age</td>
+        
+        <td><a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a></td>
+        <td><a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-cut"></i></a></td>
     </tr>
-        }
+    }
 </table>
 

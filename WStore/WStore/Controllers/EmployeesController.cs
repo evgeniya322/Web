@@ -4,56 +4,110 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WStore.Infrasructure.Interface;
 using WStore.Models;
 
 namespace WStore.Controllers
 {
-
+    [Route("users")]
     public class EmployeesController : Controller
     {
-        private static readonly List<EmployeeView> _Employees = new List<EmployeeView>
+        private readonly IEmployeesData _employeesData;
+
+        public EmployeesController(IEmployeesData employeesData)
         {
-            new EmployeeView{Id=1, FirstName="Иван", Patronymic="Иванович",SurName="Иванов", Age=25, City="Томск" },
-            new EmployeeView{Id=2, FirstName="Петр", Patronymic="Петрович",SurName="Петров", Age=45, City="Москва" },
-            new EmployeeView{Id=3, FirstName="Андрей", Patronymic="Андреевич",SurName="Андреев", Age=29, City="Екатеринбург" }
-        };
-
-
+            _employeesData = employeesData;
+        }
+        /// <summary>
+        /// Вывод списка
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
-            
-            return View(_Employees);
+            return View(_employeesData.GetAll());
         }
 
-        public IActionResult Details(int? Id)
+
+        /// <summary>
+        /// Детали о сотруднике
+        /// </summary>
+        /// <param name="id">Id сотрудника</param>
+        /// <returns></returns>
+        [Route("{id}")]
+        public IActionResult Details(int id)
         {
-            if (Id is null)
-                return BadRequest();
+            // Получаем сотрудника по Id
+            var employee = _employeesData.GetById(id);
 
-            var employee = _Employees.FirstOrDefault(e => e.Id == Id);
-            if (employee is null)
-                return NotFound();
+            // Если такого не существует
+            if (ReferenceEquals(employee, null))
+                return NotFound();// возвращаем результат 404 Not Found
 
+            // Иначе возвращаем сотрудника
             return View(employee);
         }
 
-        public IActionResult DetailsName(string FirstName, string LastName)
+
+        /// <summary>
+        /// Добавление или редактирование сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("edit/{id?}")]
+        public IActionResult Edit(int? id)
         {
-            if (FirstName is null && LastName is null)
-                return BadRequest();
-
-            IEnumerable<EmployeeView> employees = _Employees;
-            if (!string.IsNullOrWhiteSpace(FirstName))
-                employees = employees.Where(e => e.FirstName == FirstName);
-            if (!string.IsNullOrWhiteSpace(LastName))
-                employees = employees.Where(e => e.SurName == LastName);
-
-            var employee = employees.FirstOrDefault();
-
-            if (employee is null)
-                return NotFound();
-
-            return View(nameof(Details), employee);
+            EmployeeView model;
+            if (id.HasValue)
+            {
+                model = _employeesData.GetById(id.Value);
+                if (ReferenceEquals(model, null))
+                    return NotFound();// возвращаем результат 404 Not Found
+            }
+            else
+            {
+                model = new EmployeeView();
+            }
+            return View(model);
         }
+
+        [HttpPost]
+        [Route("edit/{id?}")]
+        public IActionResult Edit(EmployeeView model)
+        {
+            if (model.Id > 0)
+            {
+                var dbItem = _employeesData.GetById(model.Id);
+
+                if (ReferenceEquals(dbItem, null))
+                    return NotFound();// возвращаем результат 404 Not Found
+
+                dbItem.FirstName = model.FirstName;
+                dbItem.SurName = model.SurName;
+                dbItem.Age = model.Age;
+                dbItem.Patronymic = model.Patronymic;
+                dbItem.Position = model.Position;
+            }
+            else
+            {
+                _employeesData.AddNew(model);
+            }
+            _employeesData.Commit();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
+        /// Удаление сотрудника
+        /// </summary>
+        /// <param name="id">Id сотрудника</param>
+        /// <returns></returns>
+        [Route("delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            _employeesData.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 }
