@@ -80,6 +80,20 @@
         "images/prettyPhoto/light_square/sprite.png",
         "js/jquery.prettyPhoto.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-validate@1.19.1",
+      "destination": "wwwroot/lib/jquery-validate/",
+      "files": [
+        "jquery.validate.min.js",
+        "localization/messages_ru.min.js"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-validation-unobtrusive@3.2.11",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
     }
   ]
 }

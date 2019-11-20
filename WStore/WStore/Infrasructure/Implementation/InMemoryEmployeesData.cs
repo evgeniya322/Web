@@ -27,7 +27,7 @@ namespace WStore.Infrasructure.Implementation
 
         public EmployeeView GetById(int id)
         {
-            return _employees.FirstOrDefault(e => e.Id.Equals(id));
+            return _employees.FirstOrDefault(e => e.Id==id);
         }
 
         public void Commit()
@@ -37,7 +37,10 @@ namespace WStore.Infrasructure.Implementation
 
         public void AddNew(EmployeeView model)
         {
-            model.Id = _employees.Max(e => e.Id) + 1;
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+
+            model.Id = _employees.Count == 0 ? 1 : _employees.Max(e => e.Id) + 1;
             _employees.Add(model);
         }
 

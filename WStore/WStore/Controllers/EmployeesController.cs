@@ -74,26 +74,39 @@ namespace WStore.Controllers
         [Route("edit/{id?}")]
         public IActionResult Edit(EmployeeView model)
         {
+            if (model is null)
+                throw new ArgumentOutOfRangeException(nameof(model));
+
+            if (model.Age < 18 && model.Age > 75)
+            {
+                ModelState.AddModelError(nameof(EmployeeView.Age), "Ошибка возраста!");
+            }
+
+            if (!ModelState.IsValid) return View(model);
+
             if (model.Id > 0)
-            {
-                var dbItem = _employeesData.GetById(model.Id);
+                {
+                    var dbItem = _employeesData.GetById(model.Id);
 
-                if (ReferenceEquals(dbItem, null))
-                    return NotFound();// возвращаем результат 404 Not Found
+                    if (ReferenceEquals(dbItem, null))
+                        // возвращаем результат 404 Not Found
+                        return NotFound();// возвращаем результат 404 Not Found
 
-                dbItem.FirstName = model.FirstName;
-                dbItem.SurName = model.SurName;
-                dbItem.Age = model.Age;
-                dbItem.Patronymic = model.Patronymic;
-                dbItem.Position = model.Position;
-            }
-            else
-            {
-                _employeesData.AddNew(model);
-            }
-            _employeesData.Commit();
+                    dbItem.FirstName = model.FirstName;
+                    dbItem.SurName = model.SurName;
+                    dbItem.Age = model.Age;
+                    dbItem.Patronymic = model.Patronymic;
+                    dbItem.Position = dbItem.Position;
+                }
+                else
+                {
+                    _employeesData.AddNew(model);
+                }
+                _employeesData.Commit();
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+
+
         }
 
         /// <summary>
