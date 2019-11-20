@@ -24,7 +24,7 @@ namespace WStore.Models
         [Display(Name = "Возраст")]
         public int Age { get; set; }
 
-        [Display(Name = "Город")]
-        public string City { get; set; }
+        [Display(Name = "Должность")]
+        public string Position { get; set; }
     }
 }
