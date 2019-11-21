@@ -29,6 +29,7 @@ namespace WStore
 
             // Добавляем разрешение зависимости
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            services.AddScoped<IProductData, InMemoryProductData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
