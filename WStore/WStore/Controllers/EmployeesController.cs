@@ -77,7 +77,7 @@ namespace WStore.Controllers
             if (model is null)
                 throw new ArgumentOutOfRangeException(nameof(model));
 
-            if (model.Age < 18 && model.Age > 75)
+            if (model.Age < 18 || model.Age > 75)
             {
                 ModelState.AddModelError(nameof(EmployeeView.Age), "Ошибка возраста!");
             }
