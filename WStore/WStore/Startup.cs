@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebStore.DAL.Context;
+using WStore.Data;
 using WStore.Infrasructure.Implementation;
 using WStore.Infrasructure.Interface;
 
@@ -30,6 +31,8 @@ namespace WStore
             services.AddDbContext<WebStoreContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddTransient<WebStoreContextInitializer>();
+
             services.AddMvc();
 
             // Добавляем разрешение зависимости
@@ -38,8 +41,10 @@ namespace WStore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
         {
+            db.InitializeAsync().Wait();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
