@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WStore.Infrasructure.Interface;
@@ -9,6 +10,7 @@ using WStore.Models;
 
 namespace WStore.Controllers
 {
+    [Authorize]
     [Route("users")]
     public class EmployeesController : Controller
     {
