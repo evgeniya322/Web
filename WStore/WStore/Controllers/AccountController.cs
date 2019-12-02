@@ -87,7 +87,7 @@ namespace WStore.Controllers
         {
             var user_name = User.Identity.Name;
             await _SignInManager.SignOutAsync();
-            _Logger.LogInformation("Пользователь {0} вышел в систему", user_name);
+            _Logger.LogInformation("Пользователь {0} вышел из системы", user_name);
             return RedirectToAction("Index", "Home");
         }
     }
