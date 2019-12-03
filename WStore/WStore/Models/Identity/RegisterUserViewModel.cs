@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using WStore.Controllers;
 
 namespace WStore.Models.Identity
 {
@@ -10,6 +12,7 @@ namespace WStore.Models.Identity
     {
         [Required]
         [MaxLength(256)]
+        [Remote(nameof(AccountController.IsNameFree), "Account", ErrorMessage = "Пользователь с таким именем уже существует.")]
         [Display(Name = "Имя пользователя")]
         public string UserName { get; set; }
 
