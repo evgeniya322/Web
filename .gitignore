@@ -260,3 +260,9 @@ paket-files/
 __pycache__/
 *.pyc
 /WStore/WStore/wwwroot/lib
+/WStore/WStore/wwwroot/css/site.min.css
+/WStore/WStore/wwwroot/css/site.css
+/WStore/WStore/wwwroot/js/site.min.js.map
+/WStore/WStore/wwwroot/js/site.min.js.gz
+/WStore/WStore/wwwroot/js/site.min.js
+/WStore/WStore/wwwroot/js/site.js

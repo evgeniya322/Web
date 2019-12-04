@@ -35,6 +35,8 @@ namespace WStore
 
             services.AddTransient<WebStoreContextInitializer>();
 
+            services.AddScoped<ICartService, CookieCartService>();
+
             services.AddIdentity<User, Role>()
                .AddEntityFrameworkStores<WebStoreContext>()
                .AddDefaultTokenProviders();

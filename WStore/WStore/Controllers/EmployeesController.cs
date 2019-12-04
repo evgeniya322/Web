@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Domain.Entities.Identity;
 using WStore.Infrasructure.Interface;
 using WStore.Models;
 
@@ -49,7 +50,7 @@ namespace WStore.Controllers
             return View(employee);
         }
 
-
+        [Authorize(Roles = Role.Administrator)]
         /// <summary>
         /// Добавление или редактирование сотрудника
         /// </summary>
@@ -73,6 +74,7 @@ namespace WStore.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.Administrator)]
         [Route("edit/{id?}")]
         public IActionResult Edit(EmployeeView model)
         {
@@ -111,6 +113,7 @@ namespace WStore.Controllers
 
         }
 
+        [Authorize(Roles = Role.Administrator)]
         /// <summary>
         /// Удаление сотрудника
         /// </summary>

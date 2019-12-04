@@ -23,6 +23,15 @@ namespace WStore.Controllers
             _Logger = Logger;
         }
 
+        public async Task<IActionResult> IsNameFree(string UserName)
+        {
+            var user = await _UserManager.FindByNameAsync(UserName);
+            if (user != null)
+                return Json("Пользователь уже существует");
+            return Json("true");
+
+        }
+
         public IActionResult Register() => View(new RegisterUserViewModel());
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -41,6 +50,7 @@ namespace WStore.Controllers
             var registration_result = await _UserManager.CreateAsync(user, Model.Password);
             if (registration_result.Succeeded)
             {
+                await _UserManager.AddToRoleAsync(user, Role.User);
                 _Logger.LogInformation("Пользователь {0} зарегистрирован", Model.UserName);
                 await _SignInManager.SignInAsync(user, false);
                 _Logger.LogInformation("Пользователь {0} вошел в систему", Model.UserName);
@@ -87,8 +97,9 @@ namespace WStore.Controllers
         {
             var user_name = User.Identity.Name;
             await _SignInManager.SignOutAsync();
-            _Logger.LogInformation("Пользователь {0} вышел в систему", user_name);
+            _Logger.LogInformation("Пользователь {0} вышел из системы", user_name);
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult AccessDenided() => View();
     }
 }
