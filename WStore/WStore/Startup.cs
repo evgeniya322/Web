@@ -37,6 +37,8 @@ namespace WStore
 
             services.AddScoped<ICartService, CookieCartService>();
 
+            services.AddScoped<IOrderService, SqlOrderService>();
+
             services.AddIdentity<User, Role>()
                .AddEntityFrameworkStores<WebStoreContext>()
                .AddDefaultTokenProviders();
