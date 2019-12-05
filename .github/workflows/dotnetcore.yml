@@ -17,6 +17,6 @@ jobs:
       run: dotnet build --configuration Release
     - uses: action/upload-artifact@master
       with:
-        key: Release
+        name: Release
         path: Web/bin/Release/netcoreapp2.2
       
