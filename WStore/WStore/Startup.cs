@@ -37,6 +37,8 @@ namespace WStore
 
             services.AddScoped<ICartService, CookieCartService>();
 
+            services.AddScoped<IOrderService, SqlOrderService>();
+
             services.AddIdentity<User, Role>()
                .AddEntityFrameworkStores<WebStoreContext>()
                .AddDefaultTokenProviders();
@@ -97,17 +99,15 @@ namespace WStore
             // Производим конфигурацию инфраструктуры MVC
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+           name: "areas",
+           template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+           );
                 // Добавляем обработчик маршрута по умолчанию
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-                // Маршрут по умолчанию состоит из трёх частей разделённых “/”
-                // Первой частью указывается имя контроллера,
-                // второй - имя действия (метода) в контроллере,
-                // третей - опциональный параметр с именем “id”
-                // Если чать не указана - используются значения по умолчанию:
-                // для контроллера имя “Home”,
-                // для действия - “Index”
+
             });
         }
     }
